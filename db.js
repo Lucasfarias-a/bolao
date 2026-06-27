@@ -171,7 +171,7 @@ export async function setSettings(key, value) {
   const serializedValue = JSON.stringify(value);
   if (isPostgres) {
     await db.query(
-      'INSERT INTO settings (key, value) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value',
+      'INSERT INTO settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = $2',
       [key, serializedValue]
     );
   } else {
